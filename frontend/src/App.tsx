@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Navbar } from './components/Navbar';
 import ProductCard from './components/ProductCard';
-import { CartPanel } from './components/CartPanel'; // 1. IMPORTA EL COMPONENTE AQUÍ
+import { CartPanel } from './components/CartPanel';
 
 interface Product {
   _id: string;
@@ -20,95 +20,14 @@ interface CartItem extends Product {
 }
 
 const mockProducts: Product[] = [
-  // ... (tus productos se mantienen igual)
-  {
-    _id: "1",
-    name: "Charizard ex - 199/165 (Scarlet & Violet: 151)",
-    description: "Carta original de colección Ultra Rare en idioma inglés. Estado Near Mint.",
-    price: 120000,
-    image: "https://images.pokemontcg.io/sv3pt5/199_hires.png",
-    category: "Sellados en stock",
-    game: "Pokémon",
-    stock: 3,
-    rarity: "Ultra Rare"
-  },
-  {
-    _id: "2",
-    name: "Caja de Sobres (Booster Box) - Twilight Masquerade",
-    description: "Caja sellada de fábrica que contiene 36 paquetes de mejora (sobres) en inglés.",
-    price: 145000,
-    image: "https://images.pokemontcg.io/sv6/boosterbox_hires.png",
-    category: "Preventas",
-    game: "Pokémon",
-    stock: 10,
-    rarity: "Booster Box"
-  },
-  {
-    _id: "3",
-    name: "Pikachu ex - 238/191 (Surging Sparks)",
-    description: "Carta Secreta de la expansión Surging Sparks. Altamente coleccionable.",
-    price: 85000,
-    image: "https://images.pokemontcg.io/sv8/238_hires.png",
-    category: "OFERTAS",
-    game: "Pokémon",
-    stock: 1,
-    rarity: "Secret Rare"
-  },
-  {
-    _id: "4",
-    name: "Elite Trainer Box (ETB) - Shrouded Fable",
-    description: "Caja de Entrenador Élite que incluye 9 sobres, fundas de Greninja y accesorios de juego.",
-    price: 49990,
-    image: "https://images.pokemontcg.io/sv6pt5/etb_hires.png",
-    category: "Sellados en stock",
-    game: "Pokémon",
-    stock: 6,
-    rarity: "Elite Trainer Box"
-  },
-  {
-    _id: "5",
-    name: "Mew ex - 232/091 (Paldean Fates)",
-    description: "Edición especial Shiny Rare de colección en idioma inglés. Estado impecable.",
-    price: 95000,
-    image: "https://images.pokemontcg.io/sv4pt5/232_hires.png",
-    category: "OFERTAS",
-    game: "Pokémon",
-    stock: 2,
-    rarity: "Shiny Ultra Rare"
-  },
-  {
-    _id: "6",
-    name: "Blastoise ex - 200/165 (Scarlet & Violet: 151)",
-    description: "Carta especial de ilustración rara (Special Illustration Rare). Idioma inglés.",
-    price: 55000,
-    image: "https://images.pokemontcg.io/sv3pt5/200_hires.png",
-    category: "Sellados en stock",
-    game: "Pokémon",
-    stock: 4,
-    rarity: "Special Illustration Rare"
-  },
-  {
-    _id: "7",
-    name: "Caja de Sobres (Booster Box) - Stellar Crown",
-    description: "Reserva tu Booster Box de la expansión Stellar Crown. Contiene 36 sobres.",
-    price: 138000,
-    image: "https://images.pokemontcg.io/sv7/boosterbox_hires.png",
-    category: "Preventas",
-    game: "Pokémon",
-    stock: 12,
-    rarity: "Booster Box"
-  },
-  {
-    _id: "8",
-    name: "Gengar ex - 193/162 (Temporal Forces)",
-    description: "Carta Ultra Rare holográfica de la expansión Temporal Forces. Idioma inglés.",
-    price: 32000,
-    image: "https://images.pokemontcg.io/sv5/193_hires.png",
-    category: "OFERTAS",
-    game: "Pokémon",
-    stock: 0,
-    rarity: "Ultra Rare"
-  }
+  { _id: "1", name: "Charizard ex - 199/165 (Scarlet & Violet: 151)", description: "Carta original de colección Ultra Rare en idioma inglés. Estado Near Mint.", price: 120000, image: "https://images.pokemontcg.io/sv3pt5/199_hires.png", category: "Sellados en stock", game: "Pokémon", stock: 3, rarity: "Ultra Rare" },
+  { _id: "2", name: "Caja de Sobres (Booster Box) - Twilight Masquerade", description: "Caja sellada de fábrica que contiene 36 paquetes de mejora (sobres) en inglés.", price: 145000, image: "https://images.pokemontcg.io/sv6/boosterbox_hires.png", category: "Preventas", game: "Pokémon", stock: 10, rarity: "Booster Box" },
+  { _id: "3", name: "Pikachu ex - 238/191 (Surging Sparks)", description: "Carta Secreta de la expansión Surging Sparks. Altamente coleccionable.", price: 85000, image: "https://images.pokemontcg.io/sv8/238_hires.png", category: "OFERTAS", game: "Pokémon", stock: 1, rarity: "Secret Rare" },
+  { _id: "4", name: "Elite Trainer Box (ETB) - Shrouded Fable", description: "Caja de Entrenador Élite que incluye 9 sobres, fundas de Greninja y accesorios de juego.", price: 49990, image: "https://images.pokemontcg.io/sv6pt5/etb_hires.png", category: "Sellados en stock", game: "Pokémon", stock: 6, rarity: "Elite Trainer Box" },
+  { _id: "5", name: "Mew ex - 232/091 (Paldean Fates)", description: "Edición especial Shiny Rare de colección en idioma inglés. Estado impecable.", price: 95000, image: "https://images.pokemontcg.io/sv4pt5/232_hires.png", category: "OFERTAS", game: "Pokémon", stock: 2, rarity: "Shiny Ultra Rare" },
+  { _id: "6", name: "Blastoise ex - 200/165 (Scarlet & Violet: 151)", description: "Carta especial de ilustración rara (Special Illustration Rare). Idioma inglés.", price: 55000, image: "https://images.pokemontcg.io/sv3pt5/200_hires.png", category: "Sellados en stock", game: "Pokémon", stock: 4, rarity: "Special Illustration Rare" },
+  { _id: "7", name: "Caja de Sobres (Booster Box) - Stellar Crown", description: "Reserva tu Booster Box de la expansión Stellar Crown. Contiene 36 sobres.", price: 138000, image: "https://images.pokemontcg.io/sv7/boosterbox_hires.png", category: "Preventas", game: "Pokémon", stock: 12, rarity: "Booster Box" },
+  { _id: "8", name: "Gengar ex - 193/162 (Temporal Forces)", description: "Carta Ultra Rare holográfica de la expansión Temporal Forces. Idioma inglés.", price: 32000, image: "https://images.pokemontcg.io/sv5/193_hires.png", category: "OFERTAS", game: "Pokémon", stock: 0, rarity: "Ultra Rare" }
 ];
 
 function App() {
@@ -116,6 +35,19 @@ function App() {
   const [category, setCategory] = useState<string>("");
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
+
+  // --- PERSISTENCIA: CARGAR AL INICIAR ---
+  useEffect(() => {
+    const savedCart = localStorage.getItem('cart');
+    if (savedCart) {
+      setCart(JSON.parse(savedCart));
+    }
+  }, []);
+
+  // --- PERSISTENCIA: GUARDAR AL CAMBIAR ---
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }, [cart]);
 
   useEffect(() => {
     fetch('http://localhost:5000/api/products')
@@ -168,7 +100,6 @@ function App() {
         onToggleCart={() => setIsCartOpen(!isCartOpen)} 
       />
       
-      {/* 2. AÑADE EL COMPONENTE AQUÍ DEBAJO DEL NAVBAR */}
       <CartPanel 
         isOpen={isCartOpen} 
         onClose={() => setIsCartOpen(false)} 
