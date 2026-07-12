@@ -4,10 +4,17 @@ interface NavbarProps {
   onSelectCategory: (category: string) => void;
   selectedCategory: string;
   cartCount: number;
-  onToggleCart: () => void; // Nueva propiedad añadida
+  onToggleCart: () => void;
+  onToggleLogin: () => void; // 1. Nueva propiedad añadida
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onSelectCategory, selectedCategory, cartCount, onToggleCart }) => {
+export const Navbar: React.FC<NavbarProps> = ({ 
+  onSelectCategory, 
+  selectedCategory, 
+  cartCount, 
+  onToggleCart, 
+  onToggleLogin // 2. Desestructurada aquí
+}) => {
   const categories = [
     "OFERTAS", 
     "Preventas", 
@@ -40,11 +47,15 @@ export const Navbar: React.FC<NavbarProps> = ({ onSelectCategory, selectedCatego
 
         {/* Acciones (Usuario y Carrito) */}
         <div className="flex items-center gap-6 text-sm font-medium">
-          <div className="flex items-center gap-1 text-slate-300 hover:text-white transition-colors cursor-pointer">
+          {/* 3. Evento onClick añadido aquí */}
+          <div 
+            onClick={onToggleLogin} 
+            className="flex items-center gap-1 text-slate-300 hover:text-white transition-colors cursor-pointer"
+          >
             <span>👤 Iniciar sesión</span>
           </div>
           
-          {/* Botón del Carrito con evento onClick para abrir el panel */}
+          {/* Botón del Carrito */}
           <div 
             onClick={onToggleCart} 
             className="flex items-center gap-2 text-slate-300 hover:text-white transition-colors cursor-pointer bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700"

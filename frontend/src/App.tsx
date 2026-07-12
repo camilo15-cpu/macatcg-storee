@@ -1,7 +1,9 @@
+
 import React, { useState, useEffect } from 'react';
 import { Navbar } from './components/Navbar';
 import ProductCard from './components/ProductCard';
 import { CartPanel } from './components/CartPanel';
+import { LoginModal } from './components/LoginModal'; // Importación añadida
 
 interface Product {
   _id: string;
@@ -35,6 +37,7 @@ function App() {
   const [category, setCategory] = useState<string>("");
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = useState(false); // Estado para Login
 
   // --- PERSISTENCIA: CARGAR AL INICIAR ---
   useEffect(() => {
@@ -98,12 +101,18 @@ function App() {
         selectedCategory={category} 
         cartCount={totalItemsInCart} 
         onToggleCart={() => setIsCartOpen(!isCartOpen)} 
+        onToggleLogin={() => setIsLoginOpen(true)} // Prop añadida
       />
       
       <CartPanel 
         isOpen={isCartOpen} 
         onClose={() => setIsCartOpen(false)} 
         cart={cart} 
+      />
+
+      <LoginModal 
+        isOpen={isLoginOpen} 
+        onClose={() => setIsLoginOpen(false)} 
       />
       
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
