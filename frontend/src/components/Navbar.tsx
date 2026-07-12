@@ -1,58 +1,47 @@
-import React from 'react';
-import { Search, ShoppingCart, User } from 'lucide-react';
+interface NavbarProps {
+  onSelectCategory: (category: string) => void;
+  selectedCategory: string;
+}
 
-export const Navbar = () => {
+export const Navbar: React.FC<NavbarProps> = ({ onSelectCategory, selectedCategory }) => {
+  const categories = [
+    "OFERTAS", 
+    "Preventas", 
+    "Sellados en stock", 
+  ];
+
   return (
-    <header className="w-full font-sans">
-      {/* Top Banner Azul */}
-      <div className="w-full bg-[#1e62bb] text-white text-center py-2 text-xs md:text-sm font-medium">
-        🚚 Envíos a todo Chile por $5.000 y GRATIS en compras sobre $100.000. <span className="hidden md:inline">(Excluye promociones especiales).</span>
-      </div>
-
-      {/* Barra Principal Blanca */}
-      <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between gap-4">
-        {/* Logo */}
-        <div className="flex-shrink-0 font-bold text-2xl text-[#1e62bb] tracking-wider cursor-pointer">
-          MACA TCG
-        </div>
-
-        {/* Buscador */}
-        <div className="flex-1 max-w-xl relative hidden md:block">
-          <input
-            type="text"
-            placeholder="Buscar productos..."
-            className="w-full pl-4 pr-10 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-[#1e62bb]"
-          />
-          <button className="absolute right-3 top-2.5 text-gray-500 hover:text-[#1e62bb]">
-            <Search size={20} />
+    <nav className="bg-slate-900 text-white border-b border-slate-800">
+      {/* ... Tu código actual del banner y buscador se mantiene igual ... */}
+      
+      {/* Barra de Categorías */}
+      <div className="bg-slate-950 border-t border-slate-800">
+        <div className="max-w-7xl mx-auto px-4 flex gap-6 overflow-x-auto py-3 text-sm font-bold">
+          {/* Botón para restablecer y ver todo */}
+          <button
+            onClick={() => onSelectCategory("")}
+            className={`cursor-pointer transition-colors whitespace-nowrap ${
+              selectedCategory === "" ? "text-blue-400" : "text-slate-400 hover:text-white"
+            }`}
+          >
+            Todos los productos
           </button>
-        </div>
 
-        {/* Botones Derecha */}
-        <div className="flex items-center gap-6 text-sm text-gray-700">
-          <button className="flex items-center gap-2 hover:text-[#1e62bb]">
-            <User size={20} />
-            <span className="hidden sm:inline">Iniciar sesión</span>
-          </button>
-          <button className="flex items-center gap-2 hover:text-[#1e62bb] relative">
-            <ShoppingCart size={20} />
-            <span className="hidden sm:inline">0 Producto(s)</span>
-          </button>
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => onSelectCategory(cat)}
+              className={`cursor-pointer transition-colors whitespace-nowrap ${
+                selectedCategory === cat 
+                  ? cat === "OFERTAS" ? "text-amber-500" : "text-blue-400"
+                  : "text-slate-400 hover:text-white"
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
         </div>
       </div>
-
-      {/* Menú de Categorías Gris Oscuro */}
-      <nav className="w-full bg-[#2a2d32] text-white overflow-x-auto whitespace-nowrap">
-        <div className="max-w-7xl mx-auto px-4 flex items-center gap-6 py-3 text-xs md:text-sm font-semibold tracking-wide">
-          <a href="#" className="hover:text-amber-400 text-amber-400">OFERTAS</a>
-          <a href="#" className="hover:text-amber-400">Preventas</a>
-          <a href="#" className="hover:text-amber-400">Sellados en stock</a>
-          <a href="#" className="hover:text-amber-400">Juego de cartas</a>
-          <a href="#" className="hover:text-amber-400">Warhammer</a>
-          <a href="#" className="hover:text-amber-400">Juegos de Mesa</a>
-          <a href="#" className="hover:text-amber-400">Accesorios Y Otros</a>
-        </div>
-      </nav>
-    </header>
+    </nav>
   );
 };

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Navbar } from './components/Navbar';
 import ProductCard from './components/ProductCard';
 
-// Definimos la estructura de un producto para TypeScript
 interface Product {
   _id: string;
   name: string;
@@ -48,11 +47,67 @@ const mockProducts: Product[] = [
     game: "Pokémon",
     stock: 1,
     rarity: "Secret Rare"
+  },
+  {
+    _id: "4",
+    name: "Elite Trainer Box (ETB) - Shrouded Fable",
+    description: "Caja de Entrenador Élite que incluye 9 sobres, fundas de Greninja y accesorios de juego.",
+    price: 49990,
+    image: "https://images.pokemontcg.io/sv6pt5/etb_hires.png",
+    category: "Sellados en stock",
+    game: "Pokémon",
+    stock: 6,
+    rarity: "Elite Trainer Box"
+  },
+  {
+    _id: "5",
+    name: "Mew ex - 232/091 (Paldean Fates)",
+    description: "Edición especial Shiny Rare de colección en idioma inglés. Estado impecable.",
+    price: 95000,
+    image: "https://images.pokemontcg.io/sv4pt5/232_hires.png",
+    category: "OFERTAS",
+    game: "Pokémon",
+    stock: 2,
+    rarity: "Shiny Ultra Rare"
+  },
+  {
+    _id: "6",
+    name: "Blastoise ex - 200/165 (Scarlet & Violet: 151)",
+    description: "Carta especial de ilustración rara (Special Illustration Rare). Idioma inglés.",
+    price: 55000,
+    image: "https://images.pokemontcg.io/sv3pt5/200_hires.png",
+    category: "Sellados en stock",
+    game: "Pokémon",
+    stock: 4,
+    rarity: "Special Illustration Rare"
+  },
+  {
+    _id: "7",
+    name: "Caja de Sobres (Booster Box) - Stellar Crown",
+    description: "Reserva tu Booster Box de la expansión Stellar Crown. Contiene 36 sobres.",
+    price: 138000,
+    image: "https://images.pokemontcg.io/sv7/boosterbox_hires.png",
+    category: "Preventas",
+    game: "Pokémon",
+    stock: 12,
+    rarity: "Booster Box"
+  },
+  {
+    _id: "8",
+    name: "Gengar ex - 193/162 (Temporal Forces)",
+    description: "Carta Ultra Rare holográfica de la expansión Temporal Forces. Idioma inglés.",
+    price: 32000,
+    image: "https://images.pokemontcg.io/sv5/193_hires.png",
+    category: "OFERTAS",
+    game: "Pokémon",
+    stock: 0, // Probando estado Agotado
+    rarity: "Ultra Rare"
   }
 ];
 
 function App() {
   const [products, setProducts] = useState<Product[]>([]);
+  const [category, setCategory] = useState<string>("");
 
   useEffect(() => {
     fetch('http://localhost:5000/api/products')
@@ -73,25 +128,39 @@ function App() {
       });
   }, []);
 
+  // Filtramos los productos según la categoría seleccionada en el Navbar
+  const filteredProducts = category === "" 
+    ? products 
+    : products.filter(p => p.category.toLowerCase() === category.toLowerCase());
+
   return (
     <div className="min-h-screen bg-slate-900 text-slate-100 font-sans">
-      <Navbar />
+      {/* Pasamos el estado y la función modificadora al Navbar */}
+      <Navbar onSelectCategory={setCategory} selectedCategory={category} />
       
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8 border-b border-slate-800 pb-4">
-          <h2 className="text-2xl font-black text-white tracking-tight">
-            PRODUCTOS DESTACADOS
+          <h2 className="text-2xl font-black text-white tracking-tight uppercase">
+            {category === "" ? "Productos Destacados" : category}
           </h2>
           <p className="text-sm text-slate-400 mt-1">
-            Explora las últimas novedades de tus TCG favoritos.
+            {category === "" 
+              ? "Explora las últimas novedades de tus TCG favoritos." 
+              : `Viendo todos los productos de la categoría ${category}.`}
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {products.map((product) => (
-            <ProductCard key={product._id} product={product} />
-          ))}
-        </div>
+        {filteredProducts.length === 0 ? (
+          <div className="text-center py-12 bg-slate-800/50 rounded-xl border border-slate-800">
+            <p className="text-slate-400 font-medium">No hay productos disponibles en esta categoría por el momento.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {filteredProducts.map((product) => (
+              <ProductCard key={product._id} product={product} />
+            ))}
+          </div>
+        )}
       </main>
     </div>
   );
