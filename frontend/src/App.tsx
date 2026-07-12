@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Navbar } from './components/Navbar';
 import ProductCard from './components/ProductCard';
+import { CartPanel } from './components/CartPanel'; // 1. IMPORTA EL COMPONENTE AQUÍ
 
 interface Product {
   _id: string;
@@ -14,7 +15,12 @@ interface Product {
   rarity?: string;
 }
 
+interface CartItem extends Product {
+  quantity: number;
+}
+
 const mockProducts: Product[] = [
+  // ... (tus productos se mantienen igual)
   {
     _id: "1",
     name: "Charizard ex - 199/165 (Scarlet & Violet: 151)",
@@ -100,7 +106,7 @@ const mockProducts: Product[] = [
     image: "https://images.pokemontcg.io/sv5/193_hires.png",
     category: "OFERTAS",
     game: "Pokémon",
-    stock: 0, // Probando estado Agotado
+    stock: 0,
     rarity: "Ultra Rare"
   }
 ];
@@ -108,6 +114,8 @@ const mockProducts: Product[] = [
 function App() {
   const [products, setProducts] = useState<Product[]>([]);
   const [category, setCategory] = useState<string>("");
+  const [cart, setCart] = useState<CartItem[]>([]);
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
   useEffect(() => {
     fetch('http://localhost:5000/api/products')
@@ -128,15 +136,44 @@ function App() {
       });
   }, []);
 
-  // Filtramos los productos según la categoría seleccionada en el Navbar
+  const addToCart = (product: Product) => {
+    setCart((prevCart) => {
+      const existingItem = prevCart.find((item) => item._id === product._id);
+      
+      if (existingItem) {
+        if (existingItem.quantity >= product.stock) {
+          alert("¡No hay suficiente stock disponible!");
+          return prevCart;
+        }
+        return prevCart.map((item) =>
+          item._id === product._id ? { ...item, quantity: item.quantity + 1 } : item
+        );
+      }
+      return [...prevCart, { ...product, quantity: 1 }];
+    });
+  };
+
+  const totalItemsInCart = cart.reduce((total, item) => total + item.quantity, 0);
+
   const filteredProducts = category === "" 
     ? products 
     : products.filter(p => p.category.toLowerCase() === category.toLowerCase());
 
   return (
     <div className="min-h-screen bg-slate-900 text-slate-100 font-sans">
-      {/* Pasamos el estado y la función modificadora al Navbar */}
-      <Navbar onSelectCategory={setCategory} selectedCategory={category} />
+      <Navbar 
+        onSelectCategory={setCategory} 
+        selectedCategory={category} 
+        cartCount={totalItemsInCart} 
+        onToggleCart={() => setIsCartOpen(!isCartOpen)} 
+      />
+      
+      {/* 2. AÑADE EL COMPONENTE AQUÍ DEBAJO DEL NAVBAR */}
+      <CartPanel 
+        isOpen={isCartOpen} 
+        onClose={() => setIsCartOpen(false)} 
+        cart={cart} 
+      />
       
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8 border-b border-slate-800 pb-4">
@@ -157,7 +194,11 @@ function App() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {filteredProducts.map((product) => (
-              <ProductCard key={product._id} product={product} />
+              <ProductCard 
+                key={product._id} 
+                product={product} 
+                onAddToCart={addToCart} 
+              />
             ))}
           </div>
         )}

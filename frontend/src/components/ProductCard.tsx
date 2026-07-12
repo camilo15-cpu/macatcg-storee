@@ -1,6 +1,5 @@
 import React from 'react';
 
-// Definimos la estructura del producto que recibe este componente
 interface Product {
   _id: string;
   name: string;
@@ -15,9 +14,10 @@ interface Product {
 
 interface ProductCardProps {
   product: Product;
+  onAddToCart: (product: Product) => void; // Recibe la función desde App.tsx
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('es-CL', {
       style: 'currency',
@@ -60,13 +60,17 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           {product.description}
         </p>
 
-        {/* Precio y Botón */}
+        {/* Precio y Botón con Evento Click */}
         <div className="flex items-center justify-between mt-auto pt-3 border-t border-slate-700">
-          <span className="text-xl font-black text-emerald-400">
-            {formatPrice(product.price)}
-          </span>
+          <div className="flex flex-col">
+            <span className="text-xl font-black text-emerald-400">
+              {formatPrice(product.price)}
+            </span>
+            <span className="text-xs text-slate-500">Stock: {product.stock}</span>
+          </div>
           <button 
             disabled={product.stock === 0}
+            onClick={() => onAddToCart(product)} // Llama a la función al presionar
             className={`px-4 py-2 rounded-lg font-bold text-sm transition-colors ${
               product.stock > 0 
                 ? 'bg-blue-600 text-white hover:bg-blue-500 cursor-pointer' 
