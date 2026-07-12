@@ -1,8 +1,24 @@
 import React from 'react';
 
-const ProductCard = ({ product }) => {
-  // Función para formatear los precios a pesos chilenos de forma limpia
-  const formatPrice = (price) => {
+// Definimos la estructura del producto que recibe este componente
+interface Product {
+  _id: string;
+  name: string;
+  description: string;
+  price: number;
+  image: string;
+  category: string;
+  game: string;
+  stock: number;
+  rarity?: string;
+}
+
+interface ProductCardProps {
+  product: Product;
+}
+
+const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+  const formatPrice = (price: number) => {
     return new Intl.NumberFormat('es-CL', {
       style: 'currency',
       currency: 'CLP',

@@ -1,4 +1,4 @@
-
+import React from 'react';
 import { Search, ShoppingCart, User } from 'lucide-react';
 
 export const Navbar = () => {
