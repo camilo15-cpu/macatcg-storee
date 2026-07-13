@@ -8,7 +8,6 @@
     "start": "node server.js",
     "server": "nodemon server.js",
     "data:import": "node seeder.js"
-
   },
   "keywords": [],
   "author": "",

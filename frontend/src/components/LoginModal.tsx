@@ -12,11 +12,34 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // ESTA ES LA FUNCIÓN NUEVA CONECTADA A TU BACKEND
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // AQUÍ ES DONDE HARÁS EL FETCH EN LA U
-    console.log("Datos a enviar:", { email, password, isLogin });
-    alert("Ahora falta conectar este formulario con tu backend en la U.");
+    
+    const endpoint = isLogin ? '/api/users/login' : '/api/users/register';
+    
+    try {
+      const response = await fetch(`http://localhost:5000${endpoint}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert(isLogin ? "¡Bienvenido!" : "¡Usuario registrado con éxito!");
+        if (isLogin) {
+          onClose();
+        } else {
+          setIsLogin(true); // Regresa a pantalla de login tras registrar
+        }
+      } else {
+        alert(data.message || "Error al procesar la solicitud");
+      }
+    } catch (error) {
+      alert("Error de conexión: Asegúrate de que el backend esté encendido.");
+    }
   };
 
   return (
