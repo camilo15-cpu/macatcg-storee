@@ -1,8 +1,13 @@
+
 import React, { useState, useEffect } from 'react';
 import { Navbar } from './components/Navbar';
 import ProductCard from './components/ProductCard';
 import { CartPanel } from './components/CartPanel';
 import { LoginModal } from './components/LoginModal';
+
+// Asegúrate de importar mockProducts si lo usas, 
+// o defínelo arriba si es necesario para el fallback.
+// import { mockProducts } from './data/mockProducts'; 
 
 interface Product {
   _id: string;
@@ -27,12 +32,20 @@ function App() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
 
-  // 1. Cargar productos desde el backend
+  // 1. Cargar productos desde el backend con manejo de errores
   useEffect(() => {
     fetch('http://localhost:5000/api/products')
-      .then((res) => res.json())
-      .then((data) => setProducts(data))
-      .catch((err) => console.error("Error cargando productos:", err));
+      .then((res) => {
+        if (!res.ok) throw new Error('Error en la respuesta del servidor');
+        return res.json();
+      })
+      .then((data) => {
+        setProducts(data);
+      })
+      .catch((err) => {
+        console.error("Backend offline o error cargando productos:", err);
+        // setProducts(mockProducts); // Descomenta si usas datos de respaldo
+      });
   }, []);
 
   // 2. Persistencia del carrito
@@ -49,6 +62,7 @@ function App() {
   const addToCart = (product: Product) => {
     setCart((prevCart) => {
       const existingItem = prevCart.find((item) => item._id === product._id);
+      
       if (existingItem) {
         if (existingItem.quantity >= product.stock) {
           alert("¡No hay suficiente stock!");
