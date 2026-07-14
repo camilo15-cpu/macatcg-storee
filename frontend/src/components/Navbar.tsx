@@ -17,10 +17,16 @@ export const Navbar: React.FC<NavbarProps> = ({
 }) => {
   const [user, setUser] = useState<any>(null);
 
-  // Cargamos el usuario al montar el componente
   useEffect(() => {
     const savedUser = localStorage.getItem('user');
-    if (savedUser) setUser(JSON.parse(savedUser));
+    if (savedUser) {
+      try {
+        setUser(JSON.parse(savedUser));
+      } catch (error) {
+        // Si hay un error al parsear, limpiamos el storage
+        localStorage.removeItem('user');
+      }
+    }
   }, []);
 
   const handleLogout = () => {
@@ -51,10 +57,8 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
 
         <div className="flex items-center gap-6 text-sm font-medium">
-          {/* RENDERIZADO CONDICIONAL DE USUARIO */}
           {user ? (
             <div className="flex items-center gap-4">
-              {/* Botón Admin solo visible si el usuario es admin */}
               {user.role === 'admin' && (
                 <button className="bg-red-600 hover:bg-red-500 px-3 py-1 rounded text-white font-bold cursor-pointer transition-colors">
                   Panel Admin
@@ -78,7 +82,8 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
         </div>
       </div>
-
+      
+      {/* ... (resto del JSX de categorías se mantiene igual) */}
       <div className="bg-slate-950 border-t border-slate-800">
         <div className="max-w-7xl mx-auto px-4 flex gap-6 overflow-x-auto py-3 text-sm font-bold">
           <button

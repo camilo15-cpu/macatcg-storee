@@ -34,10 +34,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onDelet
     if (!window.confirm("¿Estás seguro de eliminar este producto?")) return;
 
     try {
-      const response = await fetch(`http://localhost:5000/api/products/${product._id}`, {
+      // Modificado para usar la variable de entorno
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/products/${product._id}`, {
         method: 'DELETE',
         headers: {
-          'x-user-role': user.role || '' // Aseguramos que envíe algo
+          'x-user-role': user.role || ''
         }
       });
 
@@ -59,7 +60,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onDelet
 
   return (
     <div className="bg-slate-800 rounded-xl overflow-hidden shadow-lg border border-slate-700 hover:border-blue-500 transition-all duration-300 flex flex-col h-full group">
-      {/* Contenedor de la Imagen */}
       <div className="relative p-4 bg-slate-900 flex justify-center items-center overflow-hidden h-72">
          <img src={product.image} alt={product.name} className="h-full object-contain transform group-hover:scale-105 transition-transform duration-300"/>
          {product.rarity && (
@@ -76,7 +76,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onDelet
         <h3 className="text-lg font-bold text-white line-clamp-2 mb-2 group-hover:text-blue-400 transition-colors">{product.name}</h3>
         <p className="text-sm text-slate-400 line-clamp-2 mb-4 flex-grow">{product.description}</p>
 
-        {/* Sección de Acciones */}
         <div className="flex flex-col gap-2 mt-auto pt-3 border-t border-slate-700">
           <div className="flex items-center justify-between">
             <div className="flex flex-col">
@@ -94,7 +93,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onDelet
             </button>
           </div>
 
-          {/* Botón Admin */}
           {isAdmin && (
             <button 
               onClick={handleDelete}

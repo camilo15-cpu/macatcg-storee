@@ -21,14 +21,34 @@ export const CartPanel: React.FC<CartPanelProps> = ({ isOpen, onClose, cart }) =
 
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-  const handleCheckout = () => {
-    // Aquí es donde en la U conectaremos el envío de la orden al backend
-    alert("¡Pedido enviado con éxito! ");
-    setIsConfirming(false);
-    onClose();
+  const handleCheckout = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/orders`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          // Si tienes autenticación, aquí deberías incluir el token:
+          // 'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({ 
+          items: cart,
+          total: total 
+        }),
+      });
+
+      if (!response.ok) throw new Error("Error al enviar el pedido");
+
+      alert("¡Pedido enviado con éxito!");
+      setIsConfirming(false);
+      onClose();
+    } catch (error) {
+      console.error(error);
+      alert("Hubo un error al procesar tu pedido.");
+    }
   };
 
   return (
+    // ... (El resto de tu JSX permanece igual)
     <div className="fixed inset-0 z-50 flex justify-end">
       <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-xs" onClick={onClose}></div>
       
@@ -44,7 +64,6 @@ export const CartPanel: React.FC<CartPanelProps> = ({ isOpen, onClose, cart }) =
           {cart.length === 0 ? (
             <p className="text-slate-500 text-center py-10">Tu carrito está vacío.</p>
           ) : !isConfirming ? (
-            // Lista de productos
             cart.map((item) => (
               <div key={item._id} className="flex items-center gap-4 border-b border-slate-800 pb-4">
                 <img src={item.image} alt={item.name} className="w-16 h-16 object-contain bg-slate-800 rounded" />
@@ -55,7 +74,6 @@ export const CartPanel: React.FC<CartPanelProps> = ({ isOpen, onClose, cart }) =
               </div>
             ))
           ) : (
-            // Pantalla de confirmación
             <div className="bg-slate-800 p-4 rounded-lg border border-slate-700">
               <p className="text-slate-300 text-sm mb-4">¿Estás seguro de finalizar tu compra por un total de:</p>
               <p className="text-3xl font-black text-white mb-6">${total.toLocaleString('es-CL')}</p>

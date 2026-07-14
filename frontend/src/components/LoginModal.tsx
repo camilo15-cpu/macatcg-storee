@@ -15,10 +15,11 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Usamos la variable de entorno para la URL base
     const endpoint = isLogin ? '/api/users/login' : '/api/users/register';
     
     try {
-      const response = await fetch(`http://localhost:5000${endpoint}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -37,15 +38,15 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
           }));
           
           onClose();
-          window.location.reload(); // Recarga para que el Navbar detecte el usuario
+          window.location.reload(); 
         } else {
-          setIsLogin(true); // Regresa a pantalla de login tras registrar
+          setIsLogin(true);
         }
       } else {
         alert(data.message || "Error al procesar la solicitud");
       }
     } catch (error) {
-      alert("Error de conexión: Asegúrate de que el backend esté encendido.");
+      alert("Error de conexión: No se pudo contactar con el servidor.");
     }
   };
 
