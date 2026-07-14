@@ -51,7 +51,7 @@ function App() {
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(cart));
   }, [cart]);
-
+  //Al cargar la tienda, se piden los productos reales al backend (no son datos inventados)
   useEffect(() => {
     fetch('http://localhost:5000/api/products')
       .then((res) => {
