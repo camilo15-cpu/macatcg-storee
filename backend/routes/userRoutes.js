@@ -1,5 +1,5 @@
 import express from 'express';
-import User from '../models/user.js'; 
+import User from '../models/user.js'; // correccion linux
 const router = express.Router();
 
 // Ruta para REGISTRAR
