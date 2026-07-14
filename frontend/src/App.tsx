@@ -74,7 +74,7 @@ function App() {
   const addToCart = (product: Product) => {
     setCart((prevCart) => {
       const existingItem = prevCart.find((item) => item._id === product._id);
-      
+      //En esta parte no deja agregar al carrito mas unidades que el stock disponible
       if (existingItem) {
         if (existingItem.quantity >= product.stock) {
           alert("¡No hay suficiente stock disponible!");
