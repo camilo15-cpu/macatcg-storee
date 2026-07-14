@@ -1,13 +1,8 @@
-
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Navbar } from './components/Navbar';
 import ProductCard from './components/ProductCard';
 import { CartPanel } from './components/CartPanel';
 import { LoginModal } from './components/LoginModal';
-
-// Asegúrate de importar mockProducts si lo usas, 
-// o defínelo arriba si es necesario para el fallback.
-// import { mockProducts } from './data/mockProducts'; 
 
 interface Product {
   _id: string;
@@ -32,9 +27,9 @@ function App() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
 
-  // 1. Cargar productos desde el backend con manejo de errores
+  // 1. Cargar productos desde el backend utilizando la variable de entorno
   useEffect(() => {
-    fetch('http://localhost:5000/api/products')
+    fetch(`${import.meta.env.VITE_API_URL}/api/products`)
       .then((res) => {
         if (!res.ok) throw new Error('Error en la respuesta del servidor');
         return res.json();
@@ -43,8 +38,7 @@ function App() {
         setProducts(data);
       })
       .catch((err) => {
-        console.error("Backend offline o error cargando productos:", err);
-        // setProducts(mockProducts); // Descomenta si usas datos de respaldo
+        console.error("Error cargando productos:", err);
       });
   }, []);
 
