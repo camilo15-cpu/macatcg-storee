@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-
+// Esto se conecta a MongoDB Atlas (lo que seria la nube)
 const connectDB = async () => {
   try {
     const conn = await mongoose.connect(process.env.MONGO_URI);
