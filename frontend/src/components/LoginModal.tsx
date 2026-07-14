@@ -12,7 +12,6 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
 
   if (!isOpen) return null;
 
-  // ESTA ES LA FUNCIÓN NUEVA CONECTADA A TU BACKEND
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -29,8 +28,16 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
 
       if (response.ok) {
         alert(isLogin ? "¡Bienvenido!" : "¡Usuario registrado con éxito!");
+        
         if (isLogin) {
+          // GUARDADO DE SESIÓN
+          localStorage.setItem('user', JSON.stringify({
+            email: data.email,
+            role: data.role
+          }));
+          
           onClose();
+          window.location.reload(); // Recarga para que el Navbar detecte el usuario
         } else {
           setIsLogin(true); // Regresa a pantalla de login tras registrar
         }
