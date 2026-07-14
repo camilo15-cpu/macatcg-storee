@@ -1,8 +1,10 @@
+// backend/middleware/authMiddleware.js
 export const isAdmin = (req, res, next) => {
-    // Nota: Esto requiere que tengas un sistema de login con sesiones o JWT.
-    // Por ahora, asumimos que el usuario logueado viene en req.user
-    if (req.user && req.user.role === 'admin') {
-        next();
+    // Leemos el rol desde el header personalizado 'x-user-role'
+    const role = req.headers['x-user-role'];
+
+    if (role === 'admin') {
+        next(); // Es admin, dejamos pasar
     } else {
         res.status(403).json({ message: "Acceso denegado: Se requieren privilegios de administrador" });
     }

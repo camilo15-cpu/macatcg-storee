@@ -5,6 +5,7 @@ import { connectDB } from './config/db.js';
 import productRoutes from './routes/productRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 
+
 const app = express();
 
 connectDB();
